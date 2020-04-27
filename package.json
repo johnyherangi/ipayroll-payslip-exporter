@@ -8,13 +8,14 @@
     ],
     "scripts": {
         "build": "tsc",
-        "start": "node ./dist/index.js"
+        "start": "tsc && node ./dist/index.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
         "@types/node": "^13.13.4",
+        "@types/puppeteer": "^2.0.1",
         "@typescript-eslint/eslint-plugin": "^2.29.0",
         "@typescript-eslint/parser": "^2.29.0",
         "eslint": "^6.8.0",
@@ -24,5 +25,8 @@
         "prettier": "^2.0.5",
         "pretty-quick": "^2.0.1",
         "typescript": "^3.8.3"
+    },
+    "dependencies": {
+        "puppeteer": "^3.0.1"
     }
 }
