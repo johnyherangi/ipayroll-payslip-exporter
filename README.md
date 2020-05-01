@@ -11,7 +11,7 @@ IPAYROLL_USERNAME=<email address>
 IPAYROLL_PASSWORD=<password>
 ```
 
-Export your payslips with the following command
+Export your payslips
 
 ```shell
 npm install
