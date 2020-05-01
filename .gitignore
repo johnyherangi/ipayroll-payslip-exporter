@@ -1,8 +1,5 @@
-*.tar
-*.tgz
-*.env
-*.png
-dist
+.env
 coverage
+dist
+export
 node_modules
-output

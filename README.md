@@ -9,11 +9,11 @@ Create a `.env` file at the root of the project
 ```shell
 IPAYROLL_USERNAME=<email address>
 IPAYROLL_PASSWORD=<password>
-EXPORT_PATH=<path>
 ```
 
 Export your payslips with the following command
 
 ```shell
+npm install
 npm run export
 ```

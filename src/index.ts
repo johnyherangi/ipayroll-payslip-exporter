@@ -1,4 +1,5 @@
 import Playwright from "playwright"
+import fs from "fs"
 
 require("dotenv").config()
 
@@ -16,8 +17,6 @@ const main = async () => {
     const context = await browser.newContext()
     const page = await context.newPage()
     await page.goto("https://secure2.ipayroll.co.nz/login")
-
-    await page.screenshot({ path: `output/1_login.png` })
 
     await page.type("#username", getEnvironmentVariable("IPAYROLL_USERNAME"))
     await page.type("#password", getEnvironmentVariable("IPAYROLL_PASSWORD"))
@@ -37,11 +36,16 @@ const main = async () => {
             ),
     )
 
+    const exportPath = "export"
+    if (!fs.existsSync(exportPath)) {
+        fs.mkdirSync(exportPath)
+    }
+
     for (const payslip of payslips.filter((ps) => ps.id !== null)) {
         await page.click(`#${payslip.id}`)
         await page.waitForLoadState()
         await page.pdf({
-            path: `output/${payslip.name}.pdf`,
+            path: `${exportPath}/${payslip.name}.pdf`,
         })
     }
 
