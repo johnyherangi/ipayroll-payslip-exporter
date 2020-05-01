@@ -1,5 +1,6 @@
 import Playwright from "playwright"
 import fs from "fs"
+import moment from "moment"
 
 require("dotenv").config()
 
@@ -41,11 +42,16 @@ const main = async () => {
         fs.mkdirSync(exportPath)
     }
 
-    for (const payslip of payslips.filter((ps) => ps.id !== null)) {
+    for (const payslip of payslips.filter((ps) => ps.name !== null && ps.id !== null)) {
         await page.click(`#${payslip.id}`)
         await page.waitForLoadState()
+
+        const payslipName = payslip.name!
+        const date = payslipName.substring(0, payslipName.indexOf(" "))
+        const formattedDate = moment(date, "DD-MMM-YYYY").format("YYYY-MM-DD")
+        const fileName = `${formattedDate}${payslipName.substring(payslipName.indexOf(" "))}`
         await page.pdf({
-            path: `${exportPath}/${payslip.name}.pdf`,
+            path: `${exportPath}/${fileName}.pdf`,
         })
     }
 
