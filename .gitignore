@@ -1,5 +1,8 @@
 *.tar
 *.tgz
+*.env
+*.png
 dist
 coverage
 node_modules
+output

@@ -1,20 +1,49 @@
-import puppeteer, { DirectNavigationOptions } from "puppeteer"
+import Playwright from "playwright"
 
-const navigationOptions: DirectNavigationOptions = {
-    waitUntil: "networkidle2",
-    timeout: 60000,
+require("dotenv").config()
+
+const getEnvironmentVariable = (name: string) => {
+    const value = process.env[name]
+    if (!value) {
+        throw new Error(`Environment variable "${name}" not set.`)
+    }
+
+    return value
 }
 
 const main = async () => {
-    const browser = await puppeteer.launch({ headless: false })
-    const pages = await browser.pages()
-    const page = pages[0]
-    await page.goto("https://secure2.ipayroll.co.nz/login", navigationOptions)
+    const browser = await Playwright.chromium.launch()
+    const context = await browser.newContext()
+    const page = await context.newPage()
+    await page.goto("https://secure2.ipayroll.co.nz/login")
 
-    await page.type("#username", "test")
-    await page.type("#password", "test")
+    await page.screenshot({ path: `output/1_login.png` })
+
+    await page.type("#username", getEnvironmentVariable("IPAYROLL_USERNAME"))
+    await page.type("#password", getEnvironmentVariable("IPAYROLL_PASSWORD"))
     await page.click("#btn-login")
-    await page.waitForNavigation(navigationOptions)
+    await page.waitForLoadState()
+
+    await page.click("#menu-payslips")
+    await page.waitForLoadState()
+
+    const payslips = await page.$$("[id^='payslip-']").then(
+        async (payslips) =>
+            await Promise.all(
+                payslips.map(async (ps) => ({
+                    id: await ps.getAttribute("id"),
+                    name: await ps.innerText(),
+                })),
+            ),
+    )
+
+    for (const payslip of payslips.filter((ps) => ps.id !== null)) {
+        await page.click(`#${payslip.id}`)
+        await page.waitForLoadState()
+        await page.pdf({
+            path: `output/${payslip.name}.pdf`,
+        })
+    }
 
     await browser.close()
 }
