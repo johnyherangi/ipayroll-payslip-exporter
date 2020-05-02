@@ -1,4 +1,4 @@
-# ipayroll-payslip-exporter
+# iPayroll Payslip Exporter
 
 A tool that exports all of your payslips from [iPayroll](https://www.ipayroll.co.nz/) to PDF using [microsoft/playwright](https://github.com/microsoft/playwright)
 
