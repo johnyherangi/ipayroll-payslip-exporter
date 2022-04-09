@@ -27,7 +27,7 @@
     },
     "dependencies": {
         "dotenv": "^8.2.0",
-        "moment": "^2.25.1",
+        "moment": "^2.29.2",
         "playwright": "^0.15.0"
     }
 }
